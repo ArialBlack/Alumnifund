@@ -1,14 +1,14 @@
 <?php
 
  
-function create_user ($name) {
+function create_user ($name, $email) {
  
   $password = user_password(8);
  
   //set up the user fields
   $fields = array(
     'name' => $name,
-    'mail' => 'user_name@example.com',
+    'mail' => $email,
     'pass' => $password,
     'status' => 1,
     'init' => 'email address',
@@ -27,7 +27,7 @@ function create_user ($name) {
   $account->password = $fields['pass'];
  
   // Send the e-mail through the user module.
-  drupal_mail('user', 'register_no_approval_required', $email, NULL, array('account' => $account), variable_get('site_mail', 'noreply@example..com'));
+  drupal_mail('user', 'register_no_approval_required', $fields['mail'], NULL, array('account' => $account), variable_get('site_mail', 'noreply@example..com'));
   
   drupal_set_message("User ". $name . " created");
   
@@ -66,18 +66,48 @@ function create_user ($name) {
 
 
 
-function alumni_donate($form, &$form_state) {
+function alumni_donate_form($form, &$form_state) {
     global $user;
     $is_registered = false;
     $account = user_load($user->uid);
+    $u_name = "";
+    $u_mail ="";
+    $u_picture = null;
+    $u_ulogin_picture = null;
   
     if ($user->uid) {
-        print_r($user->name);
-        print_r($user->picture);
+        $u_name = $user->name;
+        $u_mail = $user->mail;
+        $u_picture = $user->picture;
         $is_registered = true;
+        
+        if (module_exists('ulogin')) {
+            $identities = _ulogin_identity_load_by_uid($user->uid);
+            if ($identities) {
+                foreach ($identities as $identity) {
+                    $data = unserialize($identity['data']);
+                    dsm($data);
+                }
+                
+                if ($data['first_name'] && $data['last_name']) {
+                    $u_name = $data['first_name'] . " " . $data['last_name'];
+                }
+                
+                if ($data['photo_big']) {
+                    $u_ulogin_picture = $data['photo_big'];
+                }
+            }
+        }
+
     } else {
         print_r("non");
     }
+    
+
+  
+
+  
+
     
     $form['description'] = array(
         '#type' => 'item',
@@ -94,7 +124,7 @@ function alumni_donate($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Surname & name (username)'),
     '#required' => TRUE,
-    '#default_value' => $user->name,
+    '#default_value' => $u_name,
     '#disabled' => $is_registered,
     );
   
@@ -102,18 +132,26 @@ function alumni_donate($form, &$form_state) {
     '#type' => 'textfield',
     '#title' => t('Email'),
     '#required' => TRUE,
-    '#default_value' => $user->mail,
+    '#default_value' => $u_mail,
     '#description' => "Please enter your email.",
     '#size' => 20,
     '#maxlength' => 20,
     '#disabled' => $is_registered,
     );
+    
+  //  if (module_exists('ulogin') && !user_is_logged_in()) 
 
-  if ($user->picture) {
+  if ($u_picture) {
     $form['avatar'] = array(
         '#type' => 'markup',
         '#markup' => theme('user_picture', array('account' => $account)),
     );
+  } 
+  else if ($u_ulogin_picture) {
+      $form['avatar'] = array(
+            '#type' => 'markup',
+            '#markup' => '<img src="'. $u_ulogin_picture .'" />',
+      );  
   } else {
     // Attach User Picture upload
    
@@ -122,7 +160,7 @@ function alumni_donate($form, &$form_state) {
         '#title' => t('Upload picture'),
         '#size' => 48,
         '#description' => 'Some description',
-        '#required' => TRUE,
+
     );
   }
 
@@ -141,7 +179,7 @@ function alumni_donate($form, &$form_state) {
 //   }
 //}
 
-function alumni_donate_validate($form, &$form_state) {
+function alumni_donate_form_validate($form, &$form_state) {
     $email = $form_state['values']['email'];
     if (!valid_email_address($email)) {
         form_set_error('email', t('Please enter a valid email address.'));
@@ -165,12 +203,13 @@ function alumni_donate_validate($form, &$form_state) {
   }
 }
 
-function alumni_donate_submit($form, &$form_state) {
+function alumni_donate_form_submit($form, &$form_state) {
     $name = $form_state['values']['name'];
+    $email = $form_state['values']['email'];
     $is_new = $form_state['values']['is_new'];
   
     if ($is_new) {
-        create_user($name);
+        create_user($name, $email);
 
         global $user;
         $uid = $user->uid;

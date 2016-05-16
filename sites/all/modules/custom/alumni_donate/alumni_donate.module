@@ -1,16 +1,16 @@
 <?php
 
-function alimnu_donate_menu() {
+function alumni_donate_menu() {
   $items = array();
 
-  $items['donate/'] = array(
+  $items['donate'] = array(
     'title' => '#2',
     'page callback' => 'drupal_get_form',
-    'page arguments' => array('alumni_donate'),
+    'page arguments' => array('alumni_donate_form'),
     'access callback' => TRUE,
     'description' => 'Tutorial 2: Form with a submit button',
     'type' => MENU_LOCAL_TASK,
-    'file' => 'alumni_donate.inc',
+    'file' => 'alumni_donate_form.inc',
   );
 
   return $items;
