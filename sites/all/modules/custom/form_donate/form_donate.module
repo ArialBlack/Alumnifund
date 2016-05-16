@@ -1,0 +1,234 @@
+<?php
+
+/**
+ * @file
+ * donates demonstrating the Drupal Form API.
+ */
+
+/**
+ * @defgroup form_donate donate: Form API
+ * @ingroup donates
+ * @{
+ * donates demonstrating the Drupal Form API.
+ *
+ * The Form donate module is a part of the donates for Developers Project
+ * and provides various Drupal Form API donates. You can download and
+ * experiment with this code at the
+ * @link http://drupal.org/project/donates donates for Developers project page. @endlink
+ */
+
+/**
+ * Implements hook_menu().
+ *
+ * Here we set up the URLs (menu entries) for the
+ * form donates. Note that most of the menu items
+ * have page callbacks and page arguments set, with
+ * page arguments set to be functions in external files.
+ */
+function form_donate_menu() {
+  $items = array();
+  $items['donate/form_donate'] = array(
+    'title' => 'Form donate',
+    'page callback' => 'form_donate_intro',
+    'access callback' => TRUE,
+    'expanded' => TRUE,
+  );
+  $items['donate/form_donate/tutorial'] = array(
+    'title' => 'Form Tutorial',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_1'),
+    'access callback' => TRUE,
+    'description' => 'A set of ten tutorials',
+    'file' => 'form_donate_tutorial.inc',
+    'type' => MENU_NORMAL_ITEM,
+  );
+  $items['donate/form_donate/tutorial/1'] = array(
+    'title' => '#1',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_1'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 1: Simplest form',
+    'type' => MENU_DEFAULT_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/2'] = array(
+    'title' => '#2',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_2'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 2: Form with a submit button',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/3'] = array(
+    'title' => '#3',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_3'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 3: Fieldsets',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/4'] = array(
+    'title' => '#4',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_4'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 4: Required fields',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/5'] = array(
+    'title' => '#5',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_5'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 5: More element attributes',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/6'] = array(
+    'title' => '#6',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_6'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 6: Form with a validate handler',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/7'] = array(
+    'title' => '#7',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_7'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 7: Form with a submit handler',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/8'] = array(
+    'title' => '#8',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_8'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 8: Basic multistep form',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/tutorial/9'] = array(
+    'title' => '#9',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_9'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 9: Form with dynamically added new fields',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+    'weight' => 9,
+  );
+  $items['donate/form_donate/tutorial/10'] = array(
+    'title' => '#10',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_10'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 10: Form with file upload',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+    'weight' => 10,
+  );
+  $items['donate/form_donate/tutorial/11'] = array(
+    'title' => '#11',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_11'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 11: generating a confirmation form',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'form_donate_tutorial.inc',
+    'weight' => 11,
+  );
+  $items['donate/form_donate/tutorial/11/confirm/%'] = array(
+    'title' => 'Name Confirmation',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_tutorial_11_confirm_name', 5),
+    'access callback' => TRUE,
+    'description' => 'Confirmation form for tutorial 11.  Generated using the confirm_form function',
+    'file' => 'form_donate_tutorial.inc',
+  );
+  $items['donate/form_donate/states'] = array(
+    'title' => '#states donate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_states_form'),
+    'access callback' => TRUE,
+    'description' => 'How to use the #states attribute in FAPI',
+    'file' => 'form_donate_states.inc',
+  );
+  $items['donate/form_donate/wizard'] = array(
+    'title' => 'Extensible wizard donate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_wizard'),
+    'access callback' => TRUE,
+    'description' => 'A general approach to a wizard multistep form.',
+    'file' => 'form_donate_wizard.inc',
+  );
+  $items['donate/form_donate/element_donate'] = array(
+    'title' => 'Element donate',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('form_donate_element_demo_form'),
+    'access callback' => TRUE,
+    'file' => 'form_donate_elements.inc',
+    'weight' => 100,
+  );
+
+  return $items;
+}
+
+/**
+ * Page callback for our general info page.
+ */
+function form_donate_intro() {
+  $markup = t('The form donate module provides a tutorial, extensible multistep donate, an element donate, and a #states donate');
+  return array('#markup' => $markup);
+}
+
+/**
+ * Implements hook_help().
+ */
+function form_donate_help($path, $arg) {
+  switch ($path) {
+    case 'donate/form_donate/tutorial':
+      // TODO: Update the URL.
+      $help = t('This form donate tutorial for Drupal 7 is the code from the <a href="http://drupal.org/node/262422">Handbook 10-step tutorial</a>');
+      break;
+
+    case 'donate/form_donate/element_donate':
+      $help = t('The Element donate shows how modules can provide their own Form API element types. Four different element types are demonstrated.');
+      break;
+  }
+  if (!empty($help)) {
+    return '<p>' . $help . '</p>';
+  }
+}
+
+/**
+ * Implements hook_element_info().
+ *
+ * To keep the various pieces of the donate together in external files,
+ * this just returns _form_donate_elements().
+ */
+function form_donate_element_info() {
+  require_once 'form_donate_elements.inc';
+  return _form_donate_element_info();
+}
+
+/**
+ * Implements hook_theme().
+ *
+ * The only theme implementation is by the element donate. To keep the various
+ * parts of the donate together, this actually returns
+ * _form_donate_element_theme().
+ */
+function form_donate_theme($existing, $type, $theme, $path) {
+  require_once 'form_donate_elements.inc';
+  return _form_donate_element_theme($existing, $type, $theme, $path);
+}
+/**
+ * @} End of "defgroup form_donate".
+ */

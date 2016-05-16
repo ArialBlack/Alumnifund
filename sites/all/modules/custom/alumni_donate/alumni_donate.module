@@ -1,0 +1,18 @@
+<?php
+
+function alimnu_donate_menu() {
+  $items = array();
+
+  $items['donate/'] = array(
+    'title' => '#2',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('alumni_donate'),
+    'access callback' => TRUE,
+    'description' => 'Tutorial 2: Form with a submit button',
+    'type' => MENU_LOCAL_TASK,
+    'file' => 'alumni_donate.inc',
+  );
+
+  return $items;
+}
+

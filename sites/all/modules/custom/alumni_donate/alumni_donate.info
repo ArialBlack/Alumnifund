@@ -1,0 +1,11 @@
+name = Alumni donate
+description = Alumni donate
+package = Alumni donate
+core = 7.x
+
+; Information added by Drupal.org packaging script on 2016-04-25
+version = "7.x-1.x"
+core = "7.x"
+project = "alumni_donate"
+datestamp = "1461610145"
+
