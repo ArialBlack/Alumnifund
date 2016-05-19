@@ -147,7 +147,8 @@ function alumni_donate_form($form, &$form_state) {
         '#markup' => theme('user_picture', array('account' => $account)),
     );
   } 
-  else if ($u_ulogin_picture) {
+  
+  if ($u_ulogin_picture) {
       $form['avatar'] = array(
             '#type' => 'markup',
             '#markup' => '<img src="'. $u_ulogin_picture .'" />',

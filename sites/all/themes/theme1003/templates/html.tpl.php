@@ -47,7 +47,7 @@ print $doctype; ?>
 			</a>
 		</div>
 	<![endif]-->
-
+        <meta name="robots" content="noindex,nofollow">
 	<title><?php print $head_title; ?></title>
 
 	<?php print $styles;

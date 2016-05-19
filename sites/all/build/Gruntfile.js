@@ -3,19 +3,19 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
     
-       // less: {
-       //     development: {
-       //         options: {
-       //             paths: ['less'],
-       //             compress: false,
-        //            cleancss: true,
-      //              dumpLineNumbers: 'comments'
-       //         },
-       //         files: {
-       //             '../themes/vdnh_ui/css/style.css': '../themes/vdnh_ui/less/style.less'
-      //          }
-      //      }
-     //   },
+       less: {
+            development: {
+                options: {
+                    paths: ['less'],
+                    compress: false,
+                    cleancss: true,
+                    dumpLineNumbers: 'comments'
+               },
+                files: {
+                    '../themes/theme1003/css/custom.css': '../themes/theme1003/less/custom.less'
+                }
+            }
+        },
         
        ftp_push: {
            your_target: {
@@ -33,6 +33,14 @@ module.exports = function(grunt) {
                        "**"
                         ],
                         dest: '/sites/all/modules/custom'
+                    },
+                    {
+                       expand: true,
+                       cwd: '../themes',
+                        src: [
+                       "**"
+                        ],
+                        dest: '/sites/all/themes'
                     }
                ]
             }
@@ -43,45 +51,33 @@ module.exports = function(grunt) {
                 files: ['Gruntfile.js']
             },
 
-          //  less: {
-          //      files: [
-          //          '../themes/vdnh_ui/less/**/*.less'
-          //      ],
-          //      tasks: ['less', 'postcss']
-         //   },
+            less: {
+                files: [
+                    '../themes/theme1003/less/**/*.less'
+                ],
+                tasks: ['less', 'postcss']
+            },
             
             ftppush: {
                 files: [
                     '../modules/custom/**/*.*',
-                   // '!../themes/vdnh_ui/**/*.less'
+                    '../themes/**/*.*'
                 ],
                 tasks: ['ftp_push']
             },
           
         },
         
-       // postcss: {
-      ///      options: {
-       //       processors: [
-        //        require('autoprefixer')({browsers: ['last 2 versions', 'ie 10']}),
-       //       ]
-      //      },
-      //      dist: {
-      //        src: '../themes/vdnh_ui/css/style.css'
-      //      }
-     //   },
-        
-     //   copy: {
-    //        main: {
-     //           files: [
-     //               // includes files within path and its sub-directories
-    //                {expand: true, src: ['../themes/vdnh_ui/**'], dest: 'd:/Open server/domains/vdnh-tech.dev/sites/all/themes/'},
-    //            ],
-    //        },
-    //    },
-
-
-        
+        postcss: {
+           options: {
+              processors: [
+               require('autoprefixer')({browsers: ['last 2 versions', 'ie 10']}),
+              ]
+            },
+            dist: {
+              src: '../themes/theme1003/css/custom.css'
+            }
+        },     
     });
 
     // load npm modules
@@ -92,9 +88,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-copy');
 
     // register tasks
-    grunt.registerTask('default', [ 'ftp_push', 'watch']);
-    grunt.registerTask('jenkins', [ 'ftp_push']);
+   // grunt.registerTask('default', [ 'ftp_push', 'watch']);
+  //  grunt.registerTask('jenkins', [ 'ftp_push']);
    
-    //grunt.registerTask('default', ['less', 'postcss', 'copy:main', 'watch']);
-   // grunt.registerTask('jenkins', ['less', 'postcss', 'copy:main']);
+    grunt.registerTask('default', ['less', 'postcss', 'ftp_push', 'watch']);
+    grunt.registerTask('jenkins', ['less', 'postcss', 'ftp_push']);
 };
